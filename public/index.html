@@ -18,19 +18,24 @@
 
             <div>
                 <label for="chat_id" class="block text-lg font-medium text-gray-700">Chat ID or Channel:</label>
-                <input type="text" id="chat_id" name="chat_id" class="w-full border rounded p-2" placeholder="@your_channel_username" required>
+                <input type="text" id="chat_id" name="chat_id" class="w-full border rounded p-2" placeholder="your_channel_username" required>
             </div>
 
             <div id="buttonsContainer" class="space-y-2">
                 <div class="button-group flex space-x-2">
                     <input type="text" placeholder="Button Text" class="w-1/2 border rounded p-2 button-text" required>
                     <input type="url" placeholder="Button URL" class="w-1/2 border rounded p-2 button-url" required>
+                    <button type="button" class="removeButton bg-red-500 text-white p-2 rounded hover:bg-red-600">Remove</button>
                 </div>
             </div>
             <button type="button" id="addButton" class="mt-2 bg-blue-500 text-white rounded p-2 hover:bg-blue-600">Add More Buttons</button>
 
             <div>
                 <button type="submit" class="w-full bg-green-500 text-white rounded p-3 font-bold hover:bg-green-600">Send Message</button>
+            </div>
+
+            <div>
+                <button type="button" id="clearButton" class="w-full bg-yellow-500 text-white rounded p-3 font-bold hover:bg-yellow-600">Clear All Fields</button>
             </div>
         </form>
     </div>
@@ -41,6 +46,8 @@
 
             const message = document.getElementById('message').value;
             let chat_id = document.getElementById('chat_id').value;
+
+            // Automatically add "@" to the chat_id if missing
             if (!chat_id.startsWith('@')) {
                 chat_id = '@' + chat_id;
             }
@@ -68,6 +75,7 @@
             }
         });
 
+        // Add new inline button functionality
         document.getElementById('addButton').addEventListener('click', function() {
             const container = document.getElementById('buttonsContainer');
             const newButtonGroup = document.createElement('div');
@@ -75,8 +83,43 @@
             newButtonGroup.innerHTML = `
                 <input type="text" placeholder="Button Text" class="w-1/2 border rounded p-2 button-text" required>
                 <input type="url" placeholder="Button URL" class="w-1/2 border rounded p-2 button-url" required>
+                <button type="button" class="removeButton bg-red-500 text-white p-2 rounded hover:bg-red-600">Remove</button>
             `;
             container.appendChild(newButtonGroup);
+
+            // Attach remove functionality to the new button group
+            attachRemoveButton(newButtonGroup.querySelector('.removeButton'));
+        });
+
+        // Attach remove functionality to the existing button groups
+        document.querySelectorAll('.removeButton').forEach(button => {
+            attachRemoveButton(button);
+        });
+
+        function attachRemoveButton(button) {
+            button.addEventListener('click', function() {
+                this.parentElement.remove();
+            });
+        }
+
+        // Clear all fields functionality
+        document.getElementById('clearButton').addEventListener('click', function() {
+            // Clear the message and chat ID fields
+            document.getElementById('message').value = '';
+            document.getElementById('chat_id').value = '';
+
+            // Remove all button groups except the first one
+            const buttonsContainer = document.getElementById('buttonsContainer');
+            buttonsContainer.innerHTML = `
+                <div class="button-group flex space-x-2">
+                    <input type="text" placeholder="Button Text" class="w-1/2 border rounded p-2 button-text" required>
+                    <input type="url" placeholder="Button URL" class="w-1/2 border rounded p-2 button-url" required>
+                    <button type="button" class="removeButton bg-red-500 text-white p-2 rounded hover:bg-red-600">Remove</button>
+                </div>
+            `;
+
+            // Re-attach remove functionality to the default button group
+            attachRemoveButton(buttonsContainer.querySelector('.removeButton'));
         });
     </script>
 </body>
