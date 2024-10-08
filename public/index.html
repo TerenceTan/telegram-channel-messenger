@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Telegram Message</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-lg mx-auto bg-white shadow-md rounded-md p-6">
+        <h2 class="text-2xl font-bold mb-4 text-center">Send Message to Telegram Channel</h2>
+
+        <form id="telegramForm" class="space-y-4">
+            <div>
+                <label for="message" class="block text-lg font-medium text-gray-700">Message:</label>
+                <textarea id="message" name="message" rows="4" class="w-full border rounded p-2" required></textarea>
+            </div>
+
+            <div>
+                <label for="chat_id" class="block text-lg font-medium text-gray-700">Chat ID or Channel:</label>
+                <input type="text" id="chat_id" name="chat_id" class="w-full border rounded p-2" placeholder="@your_channel_username" required>
+            </div>
+
+            <div id="buttonsContainer" class="space-y-2">
+                <div class="button-group flex space-x-2">
+                    <input type="text" placeholder="Button Text" class="w-1/2 border rounded p-2 button-text" required>
+                    <input type="url" placeholder="Button URL" class="w-1/2 border rounded p-2 button-url" required>
+                </div>
+            </div>
+            <button type="button" id="addButton" class="mt-2 bg-blue-500 text-white rounded p-2 hover:bg-blue-600">Add More Buttons</button>
+
+            <div>
+                <button type="submit" class="w-full bg-green-500 text-white rounded p-3 font-bold hover:bg-green-600">Send Message</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('telegramForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const message = document.getElementById('message').value;
+            let chat_id = document.getElementById('chat_id').value;
+            if (!chat_id.startsWith('@')) {
+                chat_id = '@' + chat_id;
+            }
+
+            const buttons = [];
+            document.querySelectorAll('.button-group').forEach(group => {
+                const text = group.querySelector('.button-text').value;
+                const url = group.querySelector('.button-url').value;
+                buttons.push({ text, url });
+            });
+
+            const response = await fetch('/api/sendMessage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message, chat_id, buttons }),
+            });
+
+            const result = await response.json();
+            if (result.ok) {
+                alert('Message sent successfully!');
+            } else {
+                alert('Error: ' + result.description);
+            }
+        });
+
+        document.getElementById('addButton').addEventListener('click', function() {
+            const container = document.getElementById('buttonsContainer');
+            const newButtonGroup = document.createElement('div');
+            newButtonGroup.classList.add('button-group', 'flex', 'space-x-2');
+            newButtonGroup.innerHTML = `
+                <input type="text" placeholder="Button Text" class="w-1/2 border rounded p-2 button-text" required>
+                <input type="url" placeholder="Button URL" class="w-1/2 border rounded p-2 button-url" required>
+            `;
+            container.appendChild(newButtonGroup);
+        });
+    </script>
+</body>
+</html>
