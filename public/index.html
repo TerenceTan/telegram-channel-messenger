@@ -59,19 +59,24 @@
                 buttons.push({ text, url });
             });
 
-            const response = await fetch('/api/sendMessage', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ message, chat_id, buttons }),
-            });
+            try {
+                const response = await fetch('/api/sendMessage', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message, chat_id, buttons }),
+                });
 
-            const result = await response.json();
-            if (result.ok) {
-                alert('Message sent successfully!');
-            } else {
-                alert('Error: ' + result.description);
+                const data = await response.json();
+
+                if (data.ok) {
+                    alert('Message sent successfully!');
+                } else {
+                    alert('Error sending message: ' + data.description);
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
             }
         });
 
