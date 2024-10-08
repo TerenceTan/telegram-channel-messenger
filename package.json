@@ -1,0 +1,23 @@
+{
+  "name": "telegram-channel-messenger",
+  "version": "1.0.0",
+  "description": "Post message with inline button(s) to Telegram Channel",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TerenceTan/telegram-channel-messenger.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TerenceTan/telegram-channel-messenger/issues"
+  },
+  "homepage": "https://github.com/TerenceTan/telegram-channel-messenger#readme",
+  "dependencies": {
+    "node-fetch": "^2.7.0"
+  }
+}
