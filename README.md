@@ -18,7 +18,7 @@ To send messages to a Telegram **channel**, you must:
 
 ## Live Demo
 
-[Click here to access the live tool](https://telegram-channel-messenger.vercel.app/) (replace with your Vercel deployment link)
+[Click here to access the live tool](https://telegram-channel-messenger.vercel.app/)
 
 
 ## Prerequisites
